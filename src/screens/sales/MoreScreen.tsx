@@ -10,7 +10,7 @@ import { useAuthStore } from '../../store/authStore';
 import { authAPI } from '../../services/api';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
-export default function SalesMoreScreen() {
+export default function SalesMoreScreen({ navigation }: any) {
   const { user, clearAuth } = useAuthStore();
 
   const handleLogout = () => {
@@ -32,7 +32,7 @@ export default function SalesMoreScreen() {
       title: 'Account',
       items: [
         { icon: 'person-outline', label: 'Profile', subtitle: user?.email, color: colors.primary, onPress: () => {} },
-        { icon: 'notifications-outline', label: 'Notifications', color: colors.info, onPress: () => {} },
+        { icon: 'notifications-outline', label: 'Notifications', color: colors.info, onPress: () => navigation.navigate('Notifications') },
       ],
     },
     {

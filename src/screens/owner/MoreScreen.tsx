@@ -19,7 +19,7 @@ type MenuItem = {
   danger?: boolean;
 };
 
-export default function OwnerMoreScreen() {
+export default function OwnerMoreScreen({ navigation }: any) {
   const { user, clearAuth } = useAuthStore();
   const [referralLoading, setReferralLoading] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export default function OwnerMoreScreen() {
           icon: 'notifications-outline',
           label: 'Notifications',
           color: colors.info,
-          onPress: () => {},
+          onPress: () => navigation.navigate('Notifications'),
         },
       ],
     },

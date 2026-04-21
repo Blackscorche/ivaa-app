@@ -10,7 +10,7 @@ import { useAuthStore } from '../../store/authStore';
 import { authAPI } from '../../services/api';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
-export default function AdminMoreScreen() {
+export default function AdminMoreScreen({ navigation }: any) {
   const { user, clearAuth } = useAuthStore();
 
   const handleLogout = () => {
@@ -40,8 +40,8 @@ export default function AdminMoreScreen() {
     {
       title: 'System',
       items: [
+        { icon: 'notifications-outline', label: 'Notifications', color: colors.info, onPress: () => navigation.navigate('Notifications') },
         { icon: 'settings-outline', label: 'Settings', color: colors.gray[600], onPress: () => {} },
-        { icon: 'shield-checkmark-outline', label: 'Security', color: colors.success, onPress: () => {} },
         { icon: 'help-circle-outline', label: 'Support', color: colors.primary, onPress: () => {} },
       ],
     },

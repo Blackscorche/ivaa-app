@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, ActivityIndicator } from 'react-native';
@@ -8,15 +8,37 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import OwnerNavigator from './OwnerNavigator';
 import AdminNavigator from './AdminNavigator';
 import SalesNavigator from './SalesNavigator';
+import NotificationsScreen from '../screens/shared/NotificationsScreen';
+import {
+  registerForPushNotifications,
+  addNotificationReceivedListener,
+  addNotificationResponseListener,
+} from '../services/notifications';
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   const { isAuthenticated, isLoading, user, loadAuth } = useAuthStore();
+  const notificationListener = useRef<any>(null);
+  const responseListener = useRef<any>(null);
 
   useEffect(() => {
     loadAuth();
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    registerForPushNotifications();
+
+    notificationListener.current = addNotificationReceivedListener(() => {});
+    responseListener.current = addNotificationResponseListener(() => {});
+
+    return () => {
+      notificationListener.current?.remove();
+      responseListener.current?.remove();
+    };
+  }, [isAuthenticated]);
 
   if (isLoading) {
     return (
@@ -40,6 +62,11 @@ export default function RootNavigator() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )}
+        <Stack.Screen
+          name="Notifications"
+          component={NotificationsScreen}
+          options={{ presentation: 'modal', headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

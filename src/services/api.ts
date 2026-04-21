@@ -93,6 +93,10 @@ export const ownerAPI = {
 };
 
 export const adminAPI = {
+  getNotifications: async () => {
+    const response = await api.get('/notifications');
+    return response.data;
+  },
   getShops: async () => {
     const response = await api.get('/shops');
     return response.data;
@@ -136,6 +140,10 @@ export const adminAPI = {
 };
 
 export const salesAPI = {
+  getNotifications: async () => {
+    const response = await api.get('/notifications');
+    return response.data;
+  },
   getMyShops: async () => {
     const response = await api.get('/sales/shops');
     return response.data;
