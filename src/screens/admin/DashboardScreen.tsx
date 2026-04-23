@@ -65,7 +65,6 @@ export default function AdminDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
       >
-        {/* Header */}
         <LinearGradient colors={gradients.primaryFull} style={styles.header}>
           <View style={styles.headerTop}>
             <View>
@@ -77,7 +76,6 @@ export default function AdminDashboardScreen() {
             </View>
           </View>
 
-          {/* Live stats pills */}
           <View style={styles.pillsRow}>
             <View style={styles.pill}>
               <View style={[styles.dot, { backgroundColor: colors.success }]} />
@@ -95,7 +93,6 @@ export default function AdminDashboardScreen() {
         </LinearGradient>
 
         <View style={styles.body}>
-          {/* Stats */}
           <SectionHeader title="Overview" />
           <View style={styles.statsGrid}>
             <StatCard
@@ -124,7 +121,6 @@ export default function AdminDashboardScreen() {
             />
           </View>
 
-          {/* Quick Actions */}
           <SectionHeader title="Quick Actions" />
           <View style={styles.actionsRow}>
             {[
@@ -142,7 +138,6 @@ export default function AdminDashboardScreen() {
             ))}
           </View>
 
-          {/* Pending shops alert */}
           {pendingShops > 0 && (
             <TouchableOpacity style={styles.alertCard} activeOpacity={0.85}>
               <View style={styles.alertIcon}>
@@ -156,7 +151,6 @@ export default function AdminDashboardScreen() {
             </TouchableOpacity>
           )}
 
-          {/* Screen monitoring */}
           <SectionHeader title="Screen Status" onSeeAll={() => {}} />
           {recentScreens.length === 0 ? (
             <View style={[styles.emptyCard, shadows.sm]}>

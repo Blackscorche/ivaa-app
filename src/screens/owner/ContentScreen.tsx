@@ -98,13 +98,11 @@ export default function OwnerContentScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar style="light" />
 
-      {/* Header */}
       <LinearGradient colors={gradients.primary} style={styles.header}>
         <Text style={styles.headerTitle}>My Content</Text>
         <Text style={styles.headerSubtitle}>{content.length} files</Text>
       </LinearGradient>
 
-      {/* Stats row */}
       <View style={styles.statsRow}>
         {[
           { label: 'Total', value: stats.total, color: colors.primary },
@@ -119,7 +117,6 @@ export default function OwnerContentScreen() {
         ))}
       </View>
 
-      {/* Filter tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll} contentContainerStyle={styles.filterContent}>
         {FILTERS.map(f => (
           <TouchableOpacity
@@ -135,7 +132,6 @@ export default function OwnerContentScreen() {
         ))}
       </ScrollView>
 
-      {/* Content list */}
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator color={colors.primary} />
@@ -209,14 +205,12 @@ export default function OwnerContentScreen() {
         </ScrollView>
       )}
 
-      {/* FAB */}
       <TouchableOpacity style={[styles.fab, shadows.lg]} onPress={pickFile} activeOpacity={0.85}>
         <LinearGradient colors={gradients.primary} style={styles.fabGradient}>
           <Ionicons name="cloud-upload-outline" size={24} color={colors.white} />
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Upload modal */}
       <Modal visible={showUploadModal} transparent animationType="slide" onRequestClose={() => setShowUploadModal(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalSheet}>

@@ -72,7 +72,6 @@ export default function OwnerDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
       >
-        {/* Header */}
         <LinearGradient colors={gradients.primaryFull} style={styles.header}>
           <View style={styles.headerTop}>
             <View>

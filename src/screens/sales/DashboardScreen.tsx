@@ -68,7 +68,6 @@ export default function SalesDashboardScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
       >
-        {/* Header */}
         <LinearGradient colors={gradients.primaryFull} style={styles.header}>
           <View style={styles.headerTop}>
             <View>
@@ -80,7 +79,6 @@ export default function SalesDashboardScreen() {
             </View>
           </View>
 
-          {/* Commission summary */}
           <View style={styles.commissionCard}>
             <View style={styles.commissionItem}>
               <Text style={styles.commissionAmount}>£{totalEarned.toFixed(2)}</Text>

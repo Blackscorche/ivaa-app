@@ -8,7 +8,6 @@ import {
   Platform,
   ScrollView,
   Animated,
-  Image,
   Dimensions,
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
@@ -68,7 +67,6 @@ export default function LoginScreen() {
       <StatusBar style="light" />
       <LinearGradient colors={gradients.splash} style={StyleSheet.absoluteFillObject} />
 
-      {/* Background decorative circles */}
       <View style={styles.circle1} />
       <View style={styles.circle2} />
 
@@ -81,7 +79,6 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Logo */}
           <View style={styles.logoContainer}>
             <View style={styles.logoWrapper}>
               <LinearGradient
@@ -97,7 +94,6 @@ export default function LoginScreen() {
             <Text style={styles.appTagline}>Digital Signage Management</Text>
           </View>
 
-          {/* Card */}
           <Animated.View style={[styles.card, { transform: [{ translateX: shakeAnim }] }]}>
             <Text style={styles.cardTitle}>Welcome back</Text>
             <Text style={styles.cardSubtitle}>Sign in to your account</Text>
@@ -179,7 +175,6 @@ export default function LoginScreen() {
             </View>
           </Animated.View>
 
-          {/* Footer */}
           <Text style={styles.footer}>© 2025 IVAA Media. All rights reserved.</Text>
         </ScrollView>
       </KeyboardAvoidingView>
