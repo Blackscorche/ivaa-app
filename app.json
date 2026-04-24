@@ -23,7 +23,7 @@
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#7030A0"
+        "backgroundColor": "#FFFFFF"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -51,8 +51,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "ivaa-adsync-app"
+        "projectId": "e7d59c68-9588-440c-b87b-16bdac44d58e"
       }
-    }
+    },
+    "owner": "blueopshub"
   }
 }
