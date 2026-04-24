@@ -20,7 +20,7 @@ import { colors, gradients, spacing, radius, typography, shadows } from '../../t
 
 const { width, height } = Dimensions.get('window');
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -169,7 +169,7 @@ export default function LoginScreen() {
                 </LinearGradient>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.forgotButton} activeOpacity={0.7}>
+              <TouchableOpacity style={styles.forgotButton} activeOpacity={0.7} onPress={() => navigation.navigate('ForgotPassword')}>
                 <Text style={styles.forgotText}>Forgot your password?</Text>
               </TouchableOpacity>
             </View>

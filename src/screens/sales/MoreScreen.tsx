@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { Share, Linking } from 'react-native';
 import { useAuthStore } from '../../store/authStore';
 import { authAPI } from '../../services/api';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
@@ -31,17 +32,17 @@ export default function SalesMoreScreen({ navigation }: any) {
     {
       title: 'Account',
       items: [
-        { icon: 'person-outline', label: 'Profile', subtitle: user?.email, color: colors.primary, onPress: () => {} },
+        { icon: 'person-outline', label: 'Profile', subtitle: user?.email, color: colors.primary, onPress: () => navigation.navigate('Profile') },
         { icon: 'notifications-outline', label: 'Notifications', color: colors.info, onPress: () => navigation.navigate('Notifications') },
       ],
     },
     {
       title: 'Sales Tools',
       items: [
-        { icon: 'stats-chart-outline', label: 'Performance', subtitle: 'Track your sales metrics', color: colors.secondary, onPress: () => {} },
-        { icon: 'share-social-outline', label: 'Share Referral', subtitle: 'Invite shops to the platform', color: colors.accent, onPress: () => {} },
-        { icon: 'help-circle-outline', label: 'Support', color: colors.warning, onPress: () => {} },
-        { icon: 'document-text-outline', label: 'Terms & Privacy', color: colors.gray[500], onPress: () => {} },
+        { icon: 'stats-chart-outline', label: 'Performance', subtitle: 'Track your sales metrics', color: colors.secondary, onPress: () => navigation.navigate('Commissions') },
+        { icon: 'share-social-outline', label: 'Share Referral', subtitle: 'Invite shops to the platform', color: colors.accent, onPress: () => Share.share({ message: 'Join Ivaa AdSync — the digital signage platform. Sign up at https://ivaamedia.uk' }) },
+        { icon: 'help-circle-outline', label: 'Support', color: colors.warning, onPress: () => navigation.navigate('Support') },
+        { icon: 'document-text-outline', label: 'Terms & Privacy', color: colors.gray[500], onPress: () => Linking.openURL('https://ivaamedia.uk/terms') },
       ],
     },
     {

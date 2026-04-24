@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { Linking } from 'react-native';
 import { ownerAPI } from '../../services/api';
 import StatusBadge from '../../components/common/StatusBadge';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
@@ -67,7 +68,7 @@ export default function OwnerBillingScreen() {
                   <Ionicons name="wallet" size={24} color={colors.white} />
                 </View>
               </View>
-              <TouchableOpacity style={styles.topUpBtn} activeOpacity={0.85}>
+              <TouchableOpacity style={styles.topUpBtn} activeOpacity={0.85} onPress={() => Linking.openURL('https://ivaamedia.uk/topup')}>
                 <Ionicons name="add-circle-outline" size={16} color={colors.primary} />
                 <Text style={styles.topUpBtnText}>Top Up Balance</Text>
               </TouchableOpacity>

@@ -5,10 +5,14 @@ import { View, ActivityIndicator } from 'react-native';
 import { useAuthStore } from '../store/authStore';
 import { colors } from '../theme';
 import LoginScreen from '../screens/auth/LoginScreen';
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import OwnerNavigator from './OwnerNavigator';
 import AdminNavigator from './AdminNavigator';
 import SalesNavigator from './SalesNavigator';
 import NotificationsScreen from '../screens/shared/NotificationsScreen';
+import ProfileScreen from '../screens/shared/ProfileScreen';
+import SupportScreen from '../screens/shared/SupportScreen';
+import AdminUsersScreen from '../screens/admin/UsersScreen';
 import {
   registerForPushNotifications,
   addNotificationReceivedListener,
@@ -28,12 +32,9 @@ export default function RootNavigator() {
 
   useEffect(() => {
     if (!isAuthenticated) return;
-
     registerForPushNotifications();
-
     notificationListener.current = addNotificationReceivedListener(() => {});
     responseListener.current = addNotificationResponseListener(() => {});
-
     return () => {
       notificationListener.current?.remove();
       responseListener.current?.remove();
@@ -52,7 +53,10 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isAuthenticated ? (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          </>
         ) : user?.role === 'owner' ? (
           <Stack.Screen name="Owner" component={OwnerNavigator} />
         ) : user?.role === 'admin' ? (
@@ -62,11 +66,10 @@ export default function RootNavigator() {
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )}
-        <Stack.Screen
-          name="Notifications"
-          component={NotificationsScreen}
-          options={{ presentation: 'modal', headerShown: false }}
-        />
+        <Stack.Screen name="Notifications" component={NotificationsScreen} options={{ presentation: 'modal' }} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ presentation: 'card' }} />
+        <Stack.Screen name="Support" component={SupportScreen} options={{ presentation: 'card' }} />
+        <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={{ presentation: 'card' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

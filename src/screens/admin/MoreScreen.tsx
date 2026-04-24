@@ -31,18 +31,18 @@ export default function AdminMoreScreen({ navigation }: any) {
     {
       title: 'Management',
       items: [
-        { icon: 'people-outline', label: 'Users', subtitle: 'Manage all user accounts', color: colors.secondary, onPress: () => {} },
-        { icon: 'bar-chart-outline', label: 'Reports', subtitle: 'Ads played & revenue analytics', color: colors.accent, onPress: () => {} },
-        { icon: 'images-outline', label: 'All Content', subtitle: 'Review uploaded content', color: colors.info, onPress: () => {} },
-        { icon: 'people-circle-outline', label: 'Referrals', subtitle: 'Track referral program', color: colors.warning, onPress: () => {} },
+        { icon: 'people-outline', label: 'Users', subtitle: 'Manage all user accounts', color: colors.secondary, onPress: () => navigation.navigate('AdminUsers') },
+        { icon: 'bar-chart-outline', label: 'Reports', subtitle: 'Ads played & revenue analytics', color: colors.accent, onPress: () => navigation.navigate('Admin', { screen: 'Billing' }) },
+        { icon: 'images-outline', label: 'All Content', subtitle: 'Review uploaded content', color: colors.info, onPress: () => navigation.navigate('Admin', { screen: 'Shops' }) },
+        { icon: 'people-circle-outline', label: 'Referrals', subtitle: 'Track referral program', color: colors.warning, onPress: () => navigation.navigate('Support') },
       ],
     },
     {
       title: 'System',
       items: [
         { icon: 'notifications-outline', label: 'Notifications', color: colors.info, onPress: () => navigation.navigate('Notifications') },
-        { icon: 'settings-outline', label: 'Settings', color: colors.gray[600], onPress: () => {} },
-        { icon: 'help-circle-outline', label: 'Support', color: colors.primary, onPress: () => {} },
+        { icon: 'settings-outline', label: 'Settings', color: colors.gray[600], onPress: () => navigation.navigate('Profile') },
+        { icon: 'help-circle-outline', label: 'Support', color: colors.primary, onPress: () => navigation.navigate('Support') },
       ],
     },
     {

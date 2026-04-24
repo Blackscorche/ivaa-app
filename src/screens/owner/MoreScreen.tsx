@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { Linking } from 'react-native';
 import { useAuthStore } from '../../store/authStore';
 import { ownerAPI, authAPI } from '../../services/api';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
@@ -59,7 +60,7 @@ export default function OwnerMoreScreen({ navigation }: any) {
           label: 'Profile',
           subtitle: user?.email,
           color: colors.primary,
-          onPress: () => {},
+          onPress: () => navigation.navigate('Profile'),
         },
         {
           icon: 'notifications-outline',
@@ -83,13 +84,13 @@ export default function OwnerMoreScreen({ navigation }: any) {
           icon: 'help-circle-outline',
           label: 'Support',
           color: colors.accent,
-          onPress: () => {},
+          onPress: () => navigation.navigate('Support'),
         },
         {
           icon: 'document-text-outline',
           label: 'Terms & Privacy',
           color: colors.gray[500],
-          onPress: () => {},
+          onPress: () => Linking.openURL('https://ivaamedia.uk/terms'),
         },
       ],
     },
