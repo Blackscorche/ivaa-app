@@ -19,7 +19,7 @@ import SectionHeader from '../../components/common/SectionHeader';
 import StatusBadge from '../../components/common/StatusBadge';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
-export default function SalesDashboardScreen() {
+export default function SalesDashboardScreen({ navigation }: any) {
   const { user } = useAuthStore();
   const [shops, setShops] = useState<any[]>([]);
   const [commissions, setCommissions] = useState<any[]>([]);
@@ -116,12 +116,12 @@ export default function SalesDashboardScreen() {
           <SectionHeader title="Quick Actions" />
           <View style={styles.actionsRow}>
             {[
-              { icon: 'add-circle-outline', label: 'Register', color: colors.primary },
-              { icon: 'storefront-outline', label: 'My Shops', color: colors.secondary },
-              { icon: 'cash-outline', label: 'Commission', color: colors.success },
-              { icon: 'person-outline', label: 'Profile', color: colors.accent },
+              { icon: 'add-circle-outline', label: 'Register', color: colors.primary, onPress: () => navigation.navigate('Register') },
+              { icon: 'storefront-outline', label: 'My Shops', color: colors.secondary, onPress: () => navigation.navigate('My Shops') },
+              { icon: 'cash-outline', label: 'Commission', color: colors.success, onPress: () => navigation.navigate('Commissions') },
+              { icon: 'person-outline', label: 'Profile', color: colors.accent, onPress: () => navigation.navigate('Profile') },
             ].map((action) => (
-              <TouchableOpacity key={action.label} style={styles.actionItem} activeOpacity={0.75}>
+              <TouchableOpacity key={action.label} style={styles.actionItem} activeOpacity={0.75} onPress={action.onPress}>
                 <View style={[styles.actionIcon, { backgroundColor: action.color + '18' }]}>
                   <Ionicons name={action.icon as any} size={22} color={action.color} />
                 </View>
@@ -130,9 +130,9 @@ export default function SalesDashboardScreen() {
             ))}
           </View>
 
-          <SectionHeader title="Recent Shops" onSeeAll={() => {}} />
+          <SectionHeader title="Recent Shops" onSeeAll={() => navigation.navigate('My Shops')} />
           {recentShops.length === 0 ? (
-            <TouchableOpacity style={[styles.registerCta, shadows.sm]} activeOpacity={0.85}>
+            <TouchableOpacity style={[styles.registerCta, shadows.sm]} activeOpacity={0.85} onPress={() => navigation.navigate('Register')}>
               <LinearGradient colors={gradients.primary} style={styles.registerCtaGradient}>
                 <Ionicons name="add-circle-outline" size={32} color={colors.white} />
                 <Text style={styles.registerCtaTitle}>Register Your First Shop</Text>

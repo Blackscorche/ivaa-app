@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { Linking } from 'react-native';
 import { useAuthStore } from '../../store/authStore';
 import { ownerAPI } from '../../services/api';
 import StatCard from '../../components/common/StatCard';
@@ -19,7 +20,7 @@ import SectionHeader from '../../components/common/SectionHeader';
 import StatusBadge from '../../components/common/StatusBadge';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
-export default function OwnerDashboardScreen() {
+export default function OwnerDashboardScreen({ navigation }: any) {
   const { user } = useAuthStore();
   const [shop, setShop] = useState<any>(null);
   const [content, setContent] = useState<any[]>([]);
@@ -109,7 +110,7 @@ export default function OwnerDashboardScreen() {
             </View>
             <View style={styles.creditRight}>
               <Text style={styles.creditAmount}>£{creditBalance.toFixed(2)}</Text>
-              <TouchableOpacity style={styles.topUpButton} activeOpacity={0.8}>
+              <TouchableOpacity style={styles.topUpButton} activeOpacity={0.8} onPress={() => Linking.openURL('https://ivaamedia.uk/topup')}>
                 <Ionicons name="add" size={14} color={colors.primary} />
                 <Text style={styles.topUpText}>Top Up</Text>
               </TouchableOpacity>
@@ -129,12 +130,12 @@ export default function OwnerDashboardScreen() {
           <SectionHeader title="Quick Actions" />
           <View style={styles.actionsRow}>
             {[
-              { icon: 'cloud-upload-outline', label: 'Upload', color: colors.primary },
-              { icon: 'tv-outline', label: 'Screens', color: colors.secondary },
-              { icon: 'people-outline', label: 'Referral', color: colors.accent },
-              { icon: 'card-outline', label: 'Billing', color: colors.success },
+              { icon: 'cloud-upload-outline', label: 'Upload', color: colors.primary, screen: 'Content' },
+              { icon: 'tv-outline', label: 'Screens', color: colors.secondary, screen: 'Screens' },
+              { icon: 'people-outline', label: 'Referral', color: colors.accent, screen: 'More' },
+              { icon: 'card-outline', label: 'Billing', color: colors.success, screen: 'Billing' },
             ].map((action) => (
-              <TouchableOpacity key={action.label} style={styles.actionItem} activeOpacity={0.75}>
+              <TouchableOpacity key={action.label} style={styles.actionItem} activeOpacity={0.75} onPress={() => navigation.navigate(action.screen)}>
                 <View style={[styles.actionIcon, { backgroundColor: action.color + '18' }]}>
                   <Ionicons name={action.icon as any} size={22} color={action.color} />
                 </View>
@@ -143,7 +144,7 @@ export default function OwnerDashboardScreen() {
             ))}
           </View>
 
-          <SectionHeader title="Recent Content" onSeeAll={() => {}} />
+          <SectionHeader title="Recent Content" onSeeAll={() => navigation.navigate('Content')} />
           {recentContent.length === 0 ? (
             <View style={[styles.emptyCard, shadows.sm]}>
               <Ionicons name="images-outline" size={40} color={colors.gray[300]} />

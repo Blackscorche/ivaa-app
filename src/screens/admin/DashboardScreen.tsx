@@ -19,7 +19,7 @@ import SectionHeader from '../../components/common/SectionHeader';
 import StatusBadge from '../../components/common/StatusBadge';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
-export default function AdminDashboardScreen() {
+export default function AdminDashboardScreen({ navigation }: any) {
   const { user } = useAuthStore();
   const [stats, setStats] = useState<any>(null);
   const [screens, setScreens] = useState<any[]>([]);
@@ -124,12 +124,12 @@ export default function AdminDashboardScreen() {
           <SectionHeader title="Quick Actions" />
           <View style={styles.actionsRow}>
             {[
-              { icon: 'storefront-outline', label: 'Shops', color: colors.primary },
-              { icon: 'people-outline', label: 'Users', color: colors.secondary },
-              { icon: 'bar-chart-outline', label: 'Reports', color: colors.accent },
-              { icon: 'card-outline', label: 'Billing', color: colors.success },
+              { icon: 'storefront-outline', label: 'Shops', color: colors.primary, onPress: () => navigation.navigate('Shops') },
+              { icon: 'people-outline', label: 'Users', color: colors.secondary, onPress: () => navigation.navigate('AdminUsers') },
+              { icon: 'bar-chart-outline', label: 'Reports', color: colors.accent, onPress: () => navigation.navigate('Billing') },
+              { icon: 'card-outline', label: 'Billing', color: colors.success, onPress: () => navigation.navigate('Billing') },
             ].map((action) => (
-              <TouchableOpacity key={action.label} style={styles.actionItem} activeOpacity={0.75}>
+              <TouchableOpacity key={action.label} style={styles.actionItem} activeOpacity={0.75} onPress={action.onPress}>
                 <View style={[styles.actionIcon, { backgroundColor: action.color + '18' }]}>
                   <Ionicons name={action.icon as any} size={22} color={action.color} />
                 </View>
@@ -139,7 +139,7 @@ export default function AdminDashboardScreen() {
           </View>
 
           {pendingShops > 0 && (
-            <TouchableOpacity style={styles.alertCard} activeOpacity={0.85}>
+            <TouchableOpacity style={styles.alertCard} activeOpacity={0.85} onPress={() => navigation.navigate('Shops')}>
               <View style={styles.alertIcon}>
                 <Ionicons name="alert-circle" size={22} color={colors.warning} />
               </View>
@@ -151,7 +151,7 @@ export default function AdminDashboardScreen() {
             </TouchableOpacity>
           )}
 
-          <SectionHeader title="Screen Status" onSeeAll={() => {}} />
+          <SectionHeader title="Screen Status" onSeeAll={() => navigation.navigate('Monitoring')} />
           {recentScreens.length === 0 ? (
             <View style={[styles.emptyCard, shadows.sm]}>
               <Ionicons name="tv-outline" size={40} color={colors.gray[300]} />

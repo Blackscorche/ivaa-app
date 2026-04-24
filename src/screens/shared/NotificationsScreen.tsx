@@ -7,9 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { ownerAPI } from '../../services/api';
-import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 import api from '../../services/api';
+import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
 const ICON_MAP: Record<string, { icon: string; color: string }> = {
   shop_approved:      { icon: 'checkmark-circle',   color: colors.success },
@@ -28,7 +27,8 @@ export default function NotificationsScreen() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const data = await ownerAPI.getNotifications();
+      const res = await api.get('/notifications');
+      const data = res.data;
       setNotifications(data || []);
     } catch {
       Alert.alert('Error', 'Failed to load notifications');

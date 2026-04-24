@@ -145,11 +145,11 @@ export const salesAPI = {
     return response.data;
   },
   getMyShops: async () => {
-    const response = await api.get('/sales/shops');
+    const response = await api.get('/sales/my-shops');
     return response.data;
   },
   registerShop: async (data: any) => {
-    const response = await api.post('/shops', data);
+    const response = await api.post('/sales/register-shop', data);
     return response.data;
   },
   getCommissions: async () => {

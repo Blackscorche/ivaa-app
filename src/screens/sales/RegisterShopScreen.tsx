@@ -16,20 +16,22 @@ type Field = {
   placeholder: string;
   icon: string;
   multiline?: boolean;
-  keyboardType?: 'default' | 'email-address' | 'phone-pad' | 'url';
+  keyboardType?: 'default' | 'email-address' | 'phone-pad';
   required?: boolean;
+  secure?: boolean;
 };
 
 const FIELDS: Field[] = [
-  { key: 'name', label: 'Shop Name', placeholder: 'Enter shop name', icon: 'storefront-outline', required: true },
-  { key: 'owner_name', label: "Owner's Name", placeholder: 'Full name', icon: 'person-outline', required: true },
-  { key: 'email', label: 'Email Address', placeholder: 'shop@example.com', icon: 'mail-outline', keyboardType: 'email-address', required: true },
-  { key: 'phone', label: 'Phone Number', placeholder: '+44 0000 000000', icon: 'call-outline', keyboardType: 'phone-pad' },
+  { key: 'shopName', label: 'Shop Name', placeholder: 'Enter shop name', icon: 'storefront-outline', required: true },
+  { key: 'ownerFirstName', label: "Owner's First Name", placeholder: 'First name', icon: 'person-outline', required: true },
+  { key: 'ownerLastName', label: "Owner's Last Name", placeholder: 'Last name', icon: 'person-outline', required: true },
+  { key: 'ownerEmail', label: 'Owner Email', placeholder: 'owner@example.com', icon: 'mail-outline', keyboardType: 'email-address', required: true },
+  { key: 'ownerPassword', label: 'Temporary Password', placeholder: 'Set a temporary password', icon: 'lock-closed-outline', secure: true, required: true },
+  { key: 'vatNumber', label: 'VAT Number', placeholder: 'GB123456789', icon: 'document-text-outline', required: true },
+  { key: 'shopPhone', label: 'Shop Phone', placeholder: '+44 0000 000000', icon: 'call-outline', keyboardType: 'phone-pad' },
   { key: 'address', label: 'Street Address', placeholder: 'Street address', icon: 'location-outline' },
   { key: 'city', label: 'City', placeholder: 'City', icon: 'map-outline' },
   { key: 'postcode', label: 'Postcode', placeholder: 'Postcode', icon: 'navigate-outline' },
-  { key: 'website', label: 'Website', placeholder: 'https://example.com', icon: 'globe-outline', keyboardType: 'url' },
-  { key: 'notes', label: 'Additional Notes', placeholder: 'Any additional information...', icon: 'document-text-outline', multiline: true },
 ];
 
 export default function RegisterShopScreen() {
@@ -38,7 +40,7 @@ export default function RegisterShopScreen() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async () => {
-    if (!form.name?.trim() || !form.owner_name?.trim() || !form.email?.trim()) {
+    if (!form.shopName?.trim() || !form.ownerFirstName?.trim() || !form.ownerLastName?.trim() || !form.ownerEmail?.trim() || !form.ownerPassword?.trim() || !form.vatNumber?.trim()) {
       Alert.alert('Missing Fields', 'Please fill in all required fields.');
       return;
     }
@@ -113,7 +115,8 @@ export default function RegisterShopScreen() {
                     value={form[field.key] || ''}
                     onChangeText={val => setForm(prev => ({ ...prev, [field.key]: val }))}
                     keyboardType={field.keyboardType || 'default'}
-                    autoCapitalize={field.keyboardType === 'email-address' ? 'none' : 'words'}
+                    autoCapitalize={field.keyboardType === 'email-address' || field.secure ? 'none' : 'words'}
+                    secureTextEntry={field.secure}
                     multiline={field.multiline}
                     numberOfLines={field.multiline ? 3 : 1}
                     textAlignVertical={field.multiline ? 'top' : 'center'}
