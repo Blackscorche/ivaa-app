@@ -17,8 +17,11 @@ export default function OwnerScreensScreen() {
 
   const fetchScreens = useCallback(async () => {
     try {
-      const data = await ownerAPI.getScreens();
-      setScreens(data || []);
+      const shop = await ownerAPI.getShop();
+      if (shop?.id) {
+        const data = await ownerAPI.getScreens(shop.id);
+        setScreens(data || []);
+      }
     } catch {
       Alert.alert('Error', 'Failed to load screens');
     } finally {

@@ -20,12 +20,15 @@ export default function OwnerBillingScreen() {
 
   const fetchData = useCallback(async () => {
     try {
-      const [billingData, creditData] = await Promise.allSettled([
-        ownerAPI.getBilling(),
+      const [shopData, creditData] = await Promise.allSettled([
+        ownerAPI.getShop(),
         ownerAPI.getCreditBalance(),
       ]);
-      if (billingData.status === 'fulfilled') setBilling(billingData.value || []);
       if (creditData.status === 'fulfilled') setCreditBalance(creditData.value?.credit_balance || 0);
+      if (shopData.status === 'fulfilled' && shopData.value?.id) {
+        const billingData = await ownerAPI.getBilling(shopData.value.id);
+        setBilling(billingData?.bills || []);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -35,8 +38,8 @@ export default function OwnerBillingScreen() {
   useEffect(() => { fetchData(); }, []);
   const onRefresh = () => { setRefreshing(true); fetchData(); };
 
-  const totalPaid = billing.filter(b => b.payment_status === 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
-  const totalPending = billing.filter(b => b.payment_status !== 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
+  const totalPaid = billing.filter(b => b.status === 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
+  const totalPending = billing.filter(b => b.status !== 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -97,12 +100,12 @@ export default function OwnerBillingScreen() {
             billing.map(item => (
               <View key={item.id} style={[styles.invoiceItem, shadows.sm]}>
                 <View style={[styles.invoiceIcon, {
-                  backgroundColor: item.payment_status === 'paid' ? colors.successFaint : colors.warningFaint,
+                  backgroundColor: item.status === 'paid' ? colors.successFaint : colors.warningFaint,
                 }]}>
                   <Ionicons
-                    name={item.payment_status === 'paid' ? 'checkmark-circle' : 'time'}
+                    name={item.status === 'paid' ? 'checkmark-circle' : 'time'}
                     size={20}
-                    color={item.payment_status === 'paid' ? colors.success : colors.warning}
+                    color={item.status === 'paid' ? colors.success : colors.warning}
                   />
                 </View>
                 <View style={styles.invoiceInfo}>
@@ -110,14 +113,14 @@ export default function OwnerBillingScreen() {
                     {item.description || item.type || 'Invoice'}
                   </Text>
                   <Text style={styles.invoiceDate}>
-                    {new Date(item.created_at).toLocaleDateString('en-GB', {
+                    {new Date(item.bill_date || item.created_at).toLocaleDateString('en-GB', {
                       day: 'numeric', month: 'short', year: 'numeric',
                     })}
                   </Text>
                 </View>
                 <View style={styles.invoiceRight}>
                   <Text style={styles.invoiceAmount}>£{parseFloat(item.amount || 0).toFixed(2)}</Text>
-                  <StatusBadge status={item.payment_status || 'pending'} />
+                  <StatusBadge status={item.status || 'pending'} />
                 </View>
               </View>
             ))

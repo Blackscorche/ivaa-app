@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import api from '../../services/api';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
 const TOPICS = ['General Enquiry', 'Technical Issue', 'Billing', 'Content Upload', 'Screen Problem', 'Other'];
@@ -26,10 +25,12 @@ export default function SupportScreen({ navigation }: any) {
     }
     setLoading(true);
     try {
-      await api.post('/inquiries', { subject: topic, message: message.trim() });
+      const subject = encodeURIComponent(`[${topic}] Support Request`);
+      const body = encodeURIComponent(message.trim());
+      await Linking.openURL(`mailto:support@ivaamedia.uk?subject=${subject}&body=${body}`);
       setSent(true);
     } catch {
-      Alert.alert('Error', 'Failed to send message. Please try again.');
+      Alert.alert('Error', 'Could not open email client. Please email support@ivaamedia.uk directly.');
     } finally {
       setLoading(false);
     }

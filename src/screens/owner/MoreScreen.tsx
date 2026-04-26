@@ -28,14 +28,15 @@ export default function OwnerMoreScreen({ navigation }: any) {
   const loadReferral = useCallback(async () => {
     setReferralLoading(true);
     try {
-      const data = await ownerAPI.getReferralReward();
-      setReferralCode(data?.referral_code || null);
+      await ownerAPI.getReferralReward();
+      const code = `IVAA${String(user?.id || '').padStart(4, '0')}`;
+      setReferralCode(code);
     } catch {
       Alert.alert('Error', 'Could not load referral info');
     } finally {
       setReferralLoading(false);
     }
-  }, []);
+  }, [user?.id]);
 
   const handleLogout = () => {
     Alert.alert('Log Out', 'Are you sure you want to log out?', [

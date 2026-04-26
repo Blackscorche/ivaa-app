@@ -62,12 +62,12 @@ export const ownerAPI = {
     });
     return response.data;
   },
-  getScreens: async () => {
-    const response = await api.get('/screens');
+  getScreens: async (shopId: number) => {
+    const response = await api.get(`/screens/shop/${shopId}`);
     return response.data;
   },
-  getBilling: async () => {
-    const response = await api.get('/billing/my');
+  getBilling: async (shopId: number) => {
+    const response = await api.get(`/billing/shops/${shopId}`);
     return response.data;
   },
   getCreditBalance: async () => {
@@ -126,7 +126,7 @@ export const adminAPI = {
     return response.data;
   },
   getBilling: async () => {
-    const response = await api.get('/billing');
+    const response = await api.get('/billing/all');
     return response.data;
   },
   getInquiries: async () => {

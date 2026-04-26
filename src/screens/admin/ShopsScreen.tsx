@@ -16,18 +16,24 @@ const FILTERS = ['all', 'pending', 'approved', 'rejected'];
 
 export default function AdminShopsScreen() {
   const [shops, setShops] = useState<any[]>([]);
+  const [designers, setDesigners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState('all');
   const [selectedShop, setSelectedShop] = useState<any>(null);
+  const [selectedDesignerId, setSelectedDesignerId] = useState<number | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
 
   const fetchShops = useCallback(async () => {
     try {
-      const data = await adminAPI.getShops();
-      setShops(data || []);
+      const [shopsData, designersData] = await Promise.allSettled([
+        adminAPI.getShops(),
+        api.get('/admin/designers'),
+      ]);
+      if (shopsData.status === 'fulfilled') setShops(shopsData.value || []);
+      if (designersData.status === 'fulfilled') setDesigners(designersData.value.data || []);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -40,11 +46,16 @@ export default function AdminShopsScreen() {
   const filtered = filter === 'all' ? shops : shops.filter(s => s.approval_status === filter);
 
   const handleApprove = async (shop: any) => {
+    if (!selectedDesignerId) {
+      Alert.alert('Select Designer', 'Please select a designer to assign to this shop.');
+      return;
+    }
     setActionLoading(true);
     try {
-      await api.patch(`/shops/${shop.id}/approve`);
+      await api.post(`/admin/shops/${shop.id}/approve`, { status: 'approved', designer_id: selectedDesignerId });
       fetchShops();
       setSelectedShop(null);
+      setSelectedDesignerId(null);
       Alert.alert('Approved', `${shop.name} has been approved`);
     } catch {
       Alert.alert('Error', 'Failed to approve shop');
@@ -55,9 +66,13 @@ export default function AdminShopsScreen() {
 
   const handleReject = async () => {
     if (!selectedShop) return;
+    if (!rejectReason.trim()) {
+      Alert.alert('Required', 'Please enter a reason for rejection');
+      return;
+    }
     setActionLoading(true);
     try {
-      await api.patch(`/shops/${selectedShop.id}/reject`, { reason: rejectReason });
+      await api.post(`/admin/shops/${selectedShop.id}/approve`, { status: 'rejected', rejection_reason: rejectReason.trim() });
       fetchShops();
       setSelectedShop(null);
       setShowRejectModal(false);
@@ -176,29 +191,50 @@ export default function AdminShopsScreen() {
                 </View>
 
                 {selectedShop.approval_status === 'pending' && (
-                  <View style={styles.actionRow}>
-                    <TouchableOpacity
-                      style={styles.rejectBtn}
-                      onPress={() => setShowRejectModal(true)}
-                      disabled={actionLoading}
-                    >
-                      <Text style={styles.rejectBtnText}>Reject</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.approveBtn, actionLoading && { opacity: 0.7 }]}
-                      onPress={() => handleApprove(selectedShop)}
-                      disabled={actionLoading}
-                      activeOpacity={0.85}
-                    >
-                      <LinearGradient colors={gradients.success} style={styles.approveBtnGradient}>
-                        {actionLoading ? (
-                          <ActivityIndicator color={colors.white} size="small" />
-                        ) : (
-                          <Text style={styles.approveBtnText}>Approve</Text>
-                        )}
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </View>
+                  <>
+                    {designers.length > 0 && (
+                      <View style={styles.designerSection}>
+                        <Text style={styles.rejectLabel}>Assign Designer</Text>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.designerRow}>
+                          {designers.map((d: any) => (
+                            <TouchableOpacity
+                              key={d.id}
+                              style={[styles.designerChip, selectedDesignerId === d.id && styles.designerChipActive]}
+                              onPress={() => setSelectedDesignerId(d.id)}
+                              activeOpacity={0.75}
+                            >
+                              <Text style={[styles.designerChipText, selectedDesignerId === d.id && styles.designerChipTextActive]}>
+                                {d.full_name}
+                              </Text>
+                            </TouchableOpacity>
+                          ))}
+                        </ScrollView>
+                      </View>
+                    )}
+                    <View style={styles.actionRow}>
+                      <TouchableOpacity
+                        style={styles.rejectBtn}
+                        onPress={() => setShowRejectModal(true)}
+                        disabled={actionLoading}
+                      >
+                        <Text style={styles.rejectBtnText}>Reject</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.approveBtn, actionLoading && { opacity: 0.7 }]}
+                        onPress={() => handleApprove(selectedShop)}
+                        disabled={actionLoading}
+                        activeOpacity={0.85}
+                      >
+                        <LinearGradient colors={gradients.success} style={styles.approveBtnGradient}>
+                          {actionLoading ? (
+                            <ActivityIndicator color={colors.white} size="small" />
+                          ) : (
+                            <Text style={styles.approveBtnText}>Approve</Text>
+                          )}
+                        </LinearGradient>
+                      </TouchableOpacity>
+                    </View>
+                  </>
                 )}
                 <TouchableOpacity style={styles.closeBtn} onPress={() => setSelectedShop(null)}>
                   <Text style={styles.closeBtnText}>Close</Text>
@@ -330,6 +366,12 @@ const styles = StyleSheet.create({
   approveBtnText: { ...typography.titleSmall, color: colors.white },
   closeBtn: { paddingVertical: spacing.md, alignItems: 'center' },
   closeBtnText: { ...typography.bodyMedium, color: colors.textTertiary },
+  designerSection: { marginBottom: spacing.md },
+  designerRow: { gap: spacing.xs, paddingVertical: 4 },
+  designerChip: { paddingHorizontal: spacing.md, paddingVertical: 7, borderRadius: radius.full, backgroundColor: colors.gray[100], borderWidth: 1, borderColor: colors.border },
+  designerChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  designerChipText: { ...typography.labelMedium, color: colors.textSecondary },
+  designerChipTextActive: { color: colors.white },
   rejectLabel: { ...typography.labelMedium, color: colors.textSecondary, marginBottom: spacing.sm },
   rejectInput: {
     borderWidth: 1,
