@@ -138,7 +138,7 @@ export default function AdminBillingScreen() {
                     <Text style={styles.subPlan}>{shop.plan || 'Standard'}</Text>
                   </View>
                   <View style={styles.subRight}>
-                    <Text style={styles.subAmount}>£{parseFloat(shop.monthly_fee || shop.amount || 0).toFixed(2)}/mo</Text>
+                    <Text style={styles.subAmount}>£{parseFloat(shop.monthly_revenue || 0).toFixed(2)}/mo</Text>
                     <StatusBadge status={shop.payment_status || 'active'} />
                   </View>
                 </View>

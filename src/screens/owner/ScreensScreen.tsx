@@ -34,13 +34,7 @@ export default function OwnerScreensScreen() {
   useEffect(() => { fetchScreens(); }, []);
   const onRefresh = () => { setRefreshing(true); fetchScreens(); };
 
-  const online = screens.filter(s => {
-    if (s.status === 'online') return true;
-    if (s.last_seen) {
-      return Date.now() - new Date(s.last_seen).getTime() < 5 * 60 * 1000;
-    }
-    return false;
-  }).length;
+  const online = screens.filter(s => s.status === 'online').length;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -83,8 +77,7 @@ export default function OwnerScreensScreen() {
             </View>
           ) : (
             screens.map(screen => {
-              const isOnline = screen.status === 'online' ||
-                (screen.last_seen && Date.now() - new Date(screen.last_seen).getTime() < 5 * 60 * 1000);
+              const isOnline = screen.status === 'online';
               return (
                 <View key={screen.id} style={[styles.screenCard, shadows.sm]}>
                   <View style={[styles.statusDot, { backgroundColor: isOnline ? colors.success : colors.error }]} />
@@ -92,10 +85,10 @@ export default function OwnerScreensScreen() {
                     <Ionicons name="tv" size={20} color={colors.primary} />
                   </View>
                   <View style={styles.screenInfo}>
-                    <Text style={styles.screenName}>{screen.name || screen.screen_name || `Screen ${screen.id}`}</Text>
+                    <Text style={styles.screenName}>{screen.name || `Screen ${screen.id}`}</Text>
                     <Text style={styles.screenMeta}>
                       {isOnline ? 'Online' : 'Offline'}
-                      {screen.last_seen ? `  ·  ${formatTimeAgo(screen.last_seen)}` : ''}
+                      {screen.last_heartbeat ? `  ·  ${formatTimeAgo(screen.last_heartbeat)}` : ''}
                     </Text>
                     {screen.device_id && (
                       <Text style={styles.deviceId} numberOfLines={1}>ID: {screen.device_id}</Text>
