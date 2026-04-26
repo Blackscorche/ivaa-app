@@ -36,9 +36,7 @@ export default function AdminMonitoringScreen() {
   useEffect(() => { fetchData(); }, []);
   const onRefresh = () => { setRefreshing(true); fetchData(); };
 
-  const isOnline = (screen: any) =>
-    screen.status === 'online' ||
-    (screen.last_seen && Date.now() - new Date(screen.last_seen).getTime() < 5 * 60 * 1000);
+  const isOnline = (screen: any) => screen.status === 'online';
 
   const filtered = filter === 'all'
     ? screens
@@ -110,10 +108,10 @@ export default function AdminMonitoringScreen() {
                     <Ionicons name="tv" size={20} color={online ? colors.success : colors.gray[400]} />
                   </View>
                   <View style={styles.screenInfo}>
-                    <Text style={styles.screenName}>{screen.name || screen.screen_name || `Screen ${screen.id}`}</Text>
-                    <Text style={styles.screenShop}>{screen.shop_name || screen.shopName || '—'}</Text>
-                    {screen.last_seen && (
-                      <Text style={styles.screenTime}>Last seen {formatTimeAgo(screen.last_seen)}</Text>
+                    <Text style={styles.screenName}>{screen.screenName || `Screen ${screen.id}`}</Text>
+                    <Text style={styles.screenShop}>{screen.shopName || '—'}</Text>
+                    {screen.lastSeen && (
+                      <Text style={styles.screenTime}>Last seen {formatTimeAgo(screen.lastSeen)}</Text>
                     )}
                   </View>
                   <View style={[styles.statusPill, { backgroundColor: online ? colors.successFaint : colors.errorFaint }]}>

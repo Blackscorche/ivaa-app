@@ -250,7 +250,7 @@ export default function AdminShopsScreen() {
           <View style={styles.modalSheet}>
             <View style={styles.modalHandle} />
             <Text style={styles.modalTitle}>Reject Shop</Text>
-            <Text style={styles.rejectLabel}>Reason (optional)</Text>
+            <Text style={styles.rejectLabel}>Rejection Reason *</Text>
             <TextInput
               style={styles.rejectInput}
               placeholder="Enter reason for rejection..."
