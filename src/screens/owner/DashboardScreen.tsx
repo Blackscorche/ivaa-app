@@ -29,9 +29,10 @@ export default function OwnerDashboardScreen({ navigation }: any) {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = useCallback(async () => {
+    if (!user?.shopId) return;
     try {
       const [shopData, contentData, creditData] = await Promise.allSettled([
-        ownerAPI.getShop(),
+        ownerAPI.getShop(user.shopId),
         ownerAPI.getContent(),
         ownerAPI.getCreditBalance(),
       ]);

@@ -7,6 +7,7 @@ export interface User {
   role: UserRole;
   phone?: string;
   is_active: boolean;
+  shopId?: number;
 }
 
 export interface AuthState {

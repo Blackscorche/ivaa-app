@@ -9,10 +9,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { Linking } from 'react-native';
 import { ownerAPI } from '../../services/api';
+import { useAuthStore } from '../../store/authStore';
 import StatusBadge from '../../components/common/StatusBadge';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
 export default function OwnerBillingScreen() {
+  const { user } = useAuthStore();
   const [billing, setBilling] = useState<any[]>([]);
   const [creditBalance, setCreditBalance] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -20,14 +22,13 @@ export default function OwnerBillingScreen() {
 
   const fetchData = useCallback(async () => {
     try {
-      const [shopData, creditData] = await Promise.allSettled([
-        ownerAPI.getShop(),
+      const [billingData, creditData] = await Promise.allSettled([
+        user?.shopId ? ownerAPI.getBilling(user.shopId) : Promise.resolve(null),
         ownerAPI.getCreditBalance(),
       ]);
       if (creditData.status === 'fulfilled') setCreditBalance(creditData.value?.credit_balance || 0);
-      if (shopData.status === 'fulfilled' && shopData.value?.id) {
-        const billingData = await ownerAPI.getBilling(shopData.value.id);
-        setBilling(billingData?.bills || []);
+      if (billingData.status === 'fulfilled' && billingData.value) {
+        setBilling(billingData.value?.bills || []);
       }
     } finally {
       setLoading(false);

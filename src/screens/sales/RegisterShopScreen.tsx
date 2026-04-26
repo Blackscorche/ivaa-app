@@ -28,6 +28,11 @@ const FIELDS: Field[] = [
   { key: 'ownerEmail', label: 'Owner Email', placeholder: 'owner@example.com', icon: 'mail-outline', keyboardType: 'email-address', required: true },
   { key: 'ownerPassword', label: 'Temporary Password', placeholder: 'Set a temporary password', icon: 'lock-closed-outline', secure: true, required: true },
   { key: 'vatNumber', label: 'VAT Number', placeholder: 'GB123456789', icon: 'document-text-outline', required: true },
+  { key: 'promotionType', label: 'Promotion Type', placeholder: 'e.g. retail, food, services', icon: 'pricetag-outline', required: true },
+  { key: 'wifiConnection', label: 'WiFi Connection', placeholder: 'e.g. yes, no', icon: 'wifi-outline', required: true },
+  { key: 'wifiDistance', label: 'WiFi Distance (metres)', placeholder: 'e.g. 5', icon: 'radio-outline', required: true },
+  { key: 'cableSupport', label: 'Cable Support', placeholder: 'e.g. yes, no', icon: 'hardware-chip-outline', required: true },
+  { key: 'displayFixedAt', label: 'Display Fixed At', placeholder: 'e.g. wall, ceiling, window', icon: 'pin-outline', required: true },
   { key: 'shopPhone', label: 'Shop Phone', placeholder: '+44 0000 000000', icon: 'call-outline', keyboardType: 'phone-pad' },
   { key: 'address', label: 'Street Address', placeholder: 'Street address', icon: 'location-outline' },
   { key: 'city', label: 'City', placeholder: 'City', icon: 'map-outline' },
@@ -40,7 +45,8 @@ export default function RegisterShopScreen() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async () => {
-    if (!form.shopName?.trim() || !form.ownerFirstName?.trim() || !form.ownerLastName?.trim() || !form.ownerEmail?.trim() || !form.ownerPassword?.trim() || !form.vatNumber?.trim()) {
+    const required = ['shopName', 'ownerFirstName', 'ownerLastName', 'ownerEmail', 'ownerPassword', 'vatNumber', 'promotionType', 'wifiConnection', 'wifiDistance', 'cableSupport', 'displayFixedAt'];
+    if (required.some(k => !form[k]?.trim())) {
       Alert.alert('Missing Fields', 'Please fill in all required fields.');
       return;
     }

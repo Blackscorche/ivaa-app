@@ -43,8 +43,8 @@ export const authAPI = {
 };
 
 export const ownerAPI = {
-  getShop: async () => {
-    const response = await api.get('/shops/my');
+  getShop: async (shopId: number) => {
+    const response = await api.get(`/shops/${shopId}`);
     return response.data;
   },
   getContent: async () => {
@@ -98,7 +98,7 @@ export const adminAPI = {
     return response.data;
   },
   getShops: async () => {
-    const response = await api.get('/shops');
+    const response = await api.get('/admin/shops');
     return response.data;
   },
   getUsers: async () => {
@@ -154,7 +154,7 @@ export const salesAPI = {
   },
   getCommissions: async () => {
     const response = await api.get('/sales/commissions');
-    return response.data;
+    return response.data.commissions || [];
   },
 };
 

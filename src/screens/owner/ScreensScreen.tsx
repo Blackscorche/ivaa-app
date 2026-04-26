@@ -8,18 +8,19 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { ownerAPI } from '../../services/api';
+import { useAuthStore } from '../../store/authStore';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
 export default function OwnerScreensScreen() {
+  const { user } = useAuthStore();
   const [screens, setScreens] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchScreens = useCallback(async () => {
     try {
-      const shop = await ownerAPI.getShop();
-      if (shop?.id) {
-        const data = await ownerAPI.getScreens(shop.id);
+      if (user?.shopId) {
+        const data = await ownerAPI.getScreens(user.shopId);
         setScreens(data || []);
       }
     } catch {
