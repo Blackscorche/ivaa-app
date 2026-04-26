@@ -33,7 +33,7 @@ export default function AdminMoreScreen({ navigation }: any) {
       items: [
         { icon: 'people-outline', label: 'Users', subtitle: 'Manage all user accounts', color: colors.secondary, onPress: () => navigation.navigate('AdminUsers') },
         { icon: 'bar-chart-outline', label: 'Reports', subtitle: 'Ads played & revenue analytics', color: colors.accent, onPress: () => navigation.navigate('Billing') },
-        { icon: 'images-outline', label: 'All Content', subtitle: 'Review uploaded content', color: colors.info, onPress: () => navigation.navigate('Shops') },
+        { icon: 'tv-outline', label: 'Monitoring', subtitle: 'Real-time screen status', color: colors.info, onPress: () => navigation.navigate('Monitoring') },
         { icon: 'people-circle-outline', label: 'Referrals', subtitle: 'Track referral program', color: colors.warning, onPress: () => Alert.alert('Coming Soon', 'Referral management will be available in a future update.') },
       ],
     },
