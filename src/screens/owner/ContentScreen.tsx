@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
   contentCardMeta: { ...typography.bodySmall, color: colors.textTertiary, marginTop: 3 },
   rejectionReason: { ...typography.bodySmall, color: colors.error, marginTop: 4 },
   dateMeta: { ...typography.bodySmall, color: colors.info, marginTop: 3 },
-  fab: { position: 'absolute', bottom: spacing.xl, right: spacing.lg, borderRadius: radius.full },
+  fab: { position: 'absolute', bottom: spacing.xxl, right: spacing.lg, borderRadius: radius.full },
   fabGradient: { width: 58, height: 58, borderRadius: radius.full, justifyContent: 'center', alignItems: 'center' },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   modalSheet: {

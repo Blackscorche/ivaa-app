@@ -95,8 +95,8 @@ export default function AdminUsersScreen({ navigation }: any) {
                     </Text>
                   </View>
                   <View style={styles.userInfo}>
-                    <Text style={styles.userName}>{u.full_name || '—'}</Text>
-                    <Text style={styles.userEmail}>{u.email}</Text>
+                    <Text style={styles.userName} numberOfLines={1}>{u.full_name || '—'}</Text>
+                    <Text style={styles.userEmail} numberOfLines={1}>{u.email}</Text>
                     <Text style={styles.userDate}>
                       Joined {new Date(u.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </Text>

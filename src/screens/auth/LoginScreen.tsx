@@ -52,7 +52,8 @@ export default function LoginScreen({ navigation }: any) {
 
     try {
       const data = await authAPI.login(email.trim().toLowerCase(), password);
-      await setAuth(data.token, data.user);
+      const user = { ...data.user, full_name: data.user.full_name || data.user.name };
+      await setAuth(data.token, user);
     } catch (err: any) {
       const message = err.response?.data?.error || 'Invalid email or password';
       setError(message);

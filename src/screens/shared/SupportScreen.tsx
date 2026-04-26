@@ -75,7 +75,7 @@ export default function SupportScreen({ navigation }: any) {
         <View style={{ width: 38 }} />
       </LinearGradient>
 
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
           <View style={styles.contactRow}>
             <TouchableOpacity style={styles.contactItem} onPress={() => Linking.openURL('mailto:support@ivaamedia.uk')} activeOpacity={0.8}>
