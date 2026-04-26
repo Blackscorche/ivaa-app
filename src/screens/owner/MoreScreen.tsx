@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { Linking } from 'react-native';
 import { useAuthStore } from '../../store/authStore';
-import { ownerAPI, authAPI } from '../../services/api';
+import { authAPI } from '../../services/api';
 import { colors, gradients, spacing, radius, typography, shadows } from '../../theme';
 
 type MenuItem = {
@@ -25,17 +25,11 @@ export default function OwnerMoreScreen({ navigation }: any) {
   const [referralLoading, setReferralLoading] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
 
-  const loadReferral = useCallback(async () => {
+  const loadReferral = useCallback(() => {
     setReferralLoading(true);
-    try {
-      await ownerAPI.getReferralReward();
-      const code = `IVAA${String(user?.id || '').padStart(4, '0')}`;
-      setReferralCode(code);
-    } catch {
-      Alert.alert('Error', 'Could not load referral info');
-    } finally {
-      setReferralLoading(false);
-    }
+    const code = `IVAA${String(user?.id || '').padStart(4, '0')}`;
+    setReferralCode(code);
+    setReferralLoading(false);
   }, [user?.id]);
 
   const handleLogout = () => {

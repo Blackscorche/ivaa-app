@@ -13,6 +13,8 @@ import { colors, gradients, spacing, radius, typography, shadows } from '../../t
 const ICON_MAP: Record<string, { icon: string; color: string }> = {
   shop_approved:      { icon: 'checkmark-circle',   color: colors.success },
   shop_rejected:      { icon: 'close-circle',        color: colors.error },
+  shop_registered:    { icon: 'storefront',          color: colors.warning },
+  shop_assigned:      { icon: 'person-add',          color: colors.info },
   content_published:  { icon: 'film',                color: colors.primary },
   content_designed:   { icon: 'brush',               color: colors.info },
   commission_paid:    { icon: 'cash',                 color: colors.success },
@@ -20,7 +22,7 @@ const ICON_MAP: Record<string, { icon: string; color: string }> = {
   payment:            { icon: 'card',                 color: colors.secondary },
 };
 
-export default function NotificationsScreen() {
+export default function NotificationsScreen({ navigation }: any) {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -63,7 +65,7 @@ export default function NotificationsScreen() {
 
       <LinearGradient colors={gradients.primary} style={styles.header}>
         <View style={styles.headerRow}>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>Notifications</Text>
             {unreadCount > 0 && (
               <Text style={styles.headerSubtitle}>{unreadCount} unread</Text>
@@ -74,6 +76,9 @@ export default function NotificationsScreen() {
               <Text style={styles.markAllText}>Mark all read</Text>
             </TouchableOpacity>
           )}
+          <TouchableOpacity style={styles.closeBtn} onPress={() => navigation.goBack()} activeOpacity={0.7}>
+            <Ionicons name="close" size={22} color={colors.white} />
+          </TouchableOpacity>
         </View>
       </LinearGradient>
 
@@ -189,4 +194,14 @@ const styles = StyleSheet.create({
   notifTitleBold: { fontWeight: '600' },
   notifMessage: { ...typography.bodySmall, color: colors.textSecondary, marginTop: 2 },
   notifTime: { ...typography.bodySmall, color: colors.textTertiary, marginTop: 4 },
+  closeBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: radius.full,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: spacing.sm,
+    marginTop: 2,
+  },
 });
