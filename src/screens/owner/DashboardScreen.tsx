@@ -43,9 +43,9 @@ export default function OwnerDashboardScreen({ navigation }: any) {
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [user?.shopId]);
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const onRefresh = () => { setRefreshing(true); fetchData(); };
 
