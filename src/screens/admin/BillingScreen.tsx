@@ -37,8 +37,8 @@ export default function AdminBillingScreen() {
   useEffect(() => { fetchData(); }, []);
   const onRefresh = () => { setRefreshing(true); fetchData(); };
 
-  const totalRevenue = billing.filter(b => b.payment_status === 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
-  const outstanding = billing.filter(b => b.payment_status !== 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
+  const totalRevenue = billing.filter(b => b.status === 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
+  const outstanding = billing.filter(b => b.status !== 'paid').reduce((s, b) => s + parseFloat(b.amount || 0), 0);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -99,24 +99,24 @@ export default function AdminBillingScreen() {
               billing.map(item => (
                 <View key={item.id} style={[styles.billingItem, shadows.sm]}>
                   <View style={[styles.billingIcon, {
-                    backgroundColor: item.payment_status === 'paid' ? colors.successFaint : colors.warningFaint,
+                    backgroundColor: item.status === 'paid' ? colors.successFaint : colors.warningFaint,
                   }]}>
                     <Ionicons
-                      name={item.payment_status === 'paid' ? 'checkmark-circle' : 'time'}
+                      name={item.status === 'paid' ? 'checkmark-circle' : 'time'}
                       size={20}
-                      color={item.payment_status === 'paid' ? colors.success : colors.warning}
+                      color={item.status === 'paid' ? colors.success : colors.warning}
                     />
                   </View>
                   <View style={styles.billingInfo}>
                     <Text style={styles.billingShop} numberOfLines={1}>{item.shop_name || 'Shop'}</Text>
                     <Text style={styles.billingDesc} numberOfLines={1}>{item.description || item.type || 'Invoice'}</Text>
                     <Text style={styles.billingDate}>
-                      {new Date(item.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {new Date(item.bill_date || item.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </Text>
                   </View>
                   <View style={styles.billingRight}>
                     <Text style={styles.billingAmount}>£{parseFloat(item.amount || 0).toFixed(2)}</Text>
-                    <StatusBadge status={item.payment_status || 'pending'} />
+                    <StatusBadge status={item.status || 'pending'} />
                   </View>
                 </View>
               ))

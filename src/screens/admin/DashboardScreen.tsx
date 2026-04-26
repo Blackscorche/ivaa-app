@@ -160,21 +160,21 @@ export default function AdminDashboardScreen({ navigation }: any) {
           ) : (
             recentScreens.map((screen) => {
               const isOnline = screen.status === 'online' ||
-                (screen.lastSeen && new Date().getTime() - new Date(screen.lastSeen).getTime() < 5 * 60 * 1000);
+                (screen.last_seen && new Date().getTime() - new Date(screen.last_seen).getTime() < 5 * 60 * 1000);
               return (
                 <View key={screen.id} style={[styles.screenItem, shadows.sm]}>
                   <View style={[styles.screenDot, { backgroundColor: isOnline ? colors.success : colors.error }]} />
                   <View style={styles.screenInfo}>
-                    <Text style={styles.screenName}>{screen.screenName || screen.name}</Text>
-                    <Text style={styles.screenShop}>{screen.shopName}</Text>
+                    <Text style={styles.screenName} numberOfLines={1}>{screen.name || screen.screen_name || `Screen ${screen.id}`}</Text>
+                    <Text style={styles.screenShop} numberOfLines={1}>{screen.shop_name || screen.shopName || '—'}</Text>
                   </View>
                   <View style={styles.screenMeta}>
                     <Text style={[styles.screenStatus, { color: isOnline ? colors.success : colors.error }]}>
                       {isOnline ? 'Online' : 'Offline'}
                     </Text>
-                    {screen.lastSeen && (
+                    {screen.last_seen && (
                       <Text style={styles.screenTime}>
-                        {formatTimeAgo(screen.lastSeen)}
+                        {formatTimeAgo(screen.last_seen)}
                       </Text>
                     )}
                   </View>

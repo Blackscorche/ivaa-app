@@ -99,7 +99,7 @@ export default function OwnerDashboardScreen({ navigation }: any) {
                   </Text>
                 </View>
               </View>
-              <StatusBadge status={shop.payment_status || 'active'} />
+              <StatusBadge status={shop.approval_status || 'approved'} />
             </View>
           )}
 

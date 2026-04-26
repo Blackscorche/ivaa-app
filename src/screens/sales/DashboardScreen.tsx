@@ -146,8 +146,8 @@ export default function SalesDashboardScreen({ navigation }: any) {
                   <Ionicons name="storefront" size={20} color={colors.primary} />
                 </View>
                 <View style={styles.shopInfo}>
-                  <Text style={styles.shopName}>{shop.name}</Text>
-                  <Text style={styles.shopMeta}>
+                  <Text style={styles.shopName} numberOfLines={1}>{shop.name}</Text>
+                  <Text style={styles.shopMeta} numberOfLines={1}>
                     {shop.city || shop.address || 'No location'}
                   </Text>
                 </View>
