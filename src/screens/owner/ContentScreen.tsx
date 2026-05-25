@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  RefreshControl, ActivityIndicator, Modal, Alert,
+  RefreshControl, ActivityIndicator, Modal, Alert, Linking, Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -25,6 +25,7 @@ export default function OwnerContentScreen() {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [viewingItem, setViewingItem] = useState<any>(null);
 
   const fetchContent = useCallback(async () => {
     try {
@@ -153,7 +154,22 @@ export default function OwnerContentScreen() {
             </View>
           ) : (
             filteredContent.map(item => (
-              <View key={item.id} style={[styles.contentCard, shadows.sm]}>
+              <TouchableOpacity
+                key={item.id}
+                style={[styles.contentCard, shadows.sm]}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (!item.file_url) {
+                    Alert.alert('Error', 'No file URL available to view.');
+                    return;
+                  }
+                  if (item.file_type === 'image') {
+                    setViewingItem(item);
+                  } else {
+                    Linking.openURL(item.file_url);
+                  }
+                }}
+              >
                 <View style={styles.contentCardLeft}>
                   <View style={[styles.fileIcon, {
                     backgroundColor: item.file_type === 'video'
@@ -199,7 +215,7 @@ export default function OwnerContentScreen() {
                   </View>
                 </View>
                 <StatusBadge status={item.status} />
-              </View>
+              </TouchableOpacity>
             ))
           )}
         </ScrollView>
@@ -210,6 +226,17 @@ export default function OwnerContentScreen() {
           <Ionicons name="cloud-upload-outline" size={24} color={colors.white} />
         </LinearGradient>
       </TouchableOpacity>
+
+      <Modal visible={!!viewingItem} transparent animationType="fade" onRequestClose={() => setViewingItem(null)}>
+        <View style={styles.viewerOverlay}>
+          <TouchableOpacity style={styles.viewerClose} onPress={() => setViewingItem(null)}>
+            <Ionicons name="close" size={32} color={colors.white} />
+          </TouchableOpacity>
+          {viewingItem && (
+            <Image source={{ uri: viewingItem.file_url }} style={styles.viewerImage} resizeMode="contain" />
+          )}
+        </View>
+      </Modal>
 
       <Modal visible={showUploadModal} transparent animationType="slide" onRequestClose={() => setShowUploadModal(false)}>
         <View style={styles.modalOverlay}>
@@ -365,4 +392,7 @@ const styles = StyleSheet.create({
   uploadButton: { flex: 2, borderRadius: radius.md, overflow: 'hidden' },
   uploadButtonGradient: { paddingVertical: spacing.md, alignItems: 'center' },
   uploadButtonText: { ...typography.titleSmall, color: colors.white },
+  viewerOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.9)', justifyContent: 'center', alignItems: 'center' },
+  viewerClose: { position: 'absolute', top: spacing.xxxl, right: spacing.lg, zIndex: 10, padding: spacing.sm },
+  viewerImage: { width: '100%', height: '80%' },
 });

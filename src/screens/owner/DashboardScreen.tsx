@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
+  Modal,
+  Image,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -27,6 +30,7 @@ export default function OwnerDashboardScreen({ navigation }: any) {
   const [creditBalance, setCreditBalance] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [viewingItem, setViewingItem] = useState<any>(null);
 
   const fetchData = useCallback(async () => {
     if (!user?.shopId) return;
@@ -38,7 +42,7 @@ export default function OwnerDashboardScreen({ navigation }: any) {
       ]);
       if (shopData.status === 'fulfilled') setShop(shopData.value);
       if (contentData.status === 'fulfilled') setContent(contentData.value || []);
-      if (creditData.status === 'fulfilled') setCreditBalance(creditData.value?.credit_balance || 0);
+      if (creditData.status === 'fulfilled') setCreditBalance(Number(creditData.value?.credit_balance || 0));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -154,7 +158,22 @@ export default function OwnerDashboardScreen({ navigation }: any) {
             </View>
           ) : (
             recentContent.map((item) => (
-              <View key={item.id} style={[styles.contentItem, shadows.sm]}>
+              <TouchableOpacity
+                key={item.id}
+                style={[styles.contentItem, shadows.sm]}
+                activeOpacity={0.7}
+                onPress={() => {
+                  if (!item.file_url) {
+                    Alert.alert('Error', 'No file URL available to view.');
+                    return;
+                  }
+                  if (item.file_type === 'image') {
+                    setViewingItem(item);
+                  } else {
+                    Linking.openURL(item.file_url);
+                  }
+                }}
+              >
                 <View style={styles.contentIcon}>
                   <Ionicons
                     name={item.file_type === 'video' ? 'videocam-outline' : 'image-outline'}
@@ -171,11 +190,22 @@ export default function OwnerDashboardScreen({ navigation }: any) {
                   </Text>
                 </View>
                 <StatusBadge status={item.status} />
-              </View>
+              </TouchableOpacity>
             ))
           )}
         </View>
       </ScrollView>
+
+      <Modal visible={!!viewingItem} transparent animationType="fade" onRequestClose={() => setViewingItem(null)}>
+        <View style={styles.viewerOverlay}>
+          <TouchableOpacity style={styles.viewerClose} onPress={() => setViewingItem(null)}>
+            <Ionicons name="close" size={32} color={colors.white} />
+          </TouchableOpacity>
+          {viewingItem && (
+            <Image source={{ uri: viewingItem.file_url }} style={styles.viewerImage} resizeMode="contain" />
+          )}
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -292,4 +322,7 @@ const styles = StyleSheet.create({
   contentInfo: { flex: 1 },
   contentName: { ...typography.titleSmall, color: colors.textPrimary },
   contentDate: { ...typography.bodySmall, color: colors.textTertiary, marginTop: 2 },
+  viewerOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.9)', justifyContent: 'center', alignItems: 'center' },
+  viewerClose: { position: 'absolute', top: spacing.xxxl, right: spacing.lg, zIndex: 10, padding: spacing.sm },
+  viewerImage: { width: '100%', height: '80%' },
 });

@@ -55,7 +55,14 @@ export default function LoginScreen({ navigation }: any) {
       const user = { ...data.user, full_name: data.user.full_name || data.user.name };
       await setAuth(data.token, user);
     } catch (err: any) {
-      const message = err.response?.data?.error || 'Invalid email or password';
+      let message = 'Invalid email or password';
+      if (err.response?.data?.error) {
+        message = err.response.data.error;
+      } else if (typeof err.response?.data === 'string') {
+        message = err.response.data;
+      } else if (err.message) {
+        message = err.message;
+      }
       setError(message);
       shake();
     } finally {

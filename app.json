@@ -47,13 +47,13 @@
           "defaultChannel": "default",
           "sounds": []
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {
-        "projectId": "e7d59c68-9588-440c-b87b-16bdac44d58e"
+        "projectId": "cb67ae3e-7aae-4199-9eb3-cfa2b5031b0e"
       }
-    },
-    "owner": "blueopshub"
+    }
   }
 }

@@ -5,7 +5,9 @@ import { API_BASE_URL, STORAGE_KEYS } from '../config';
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 api.interceptors.request.use(async (config) => {
@@ -53,7 +55,10 @@ export const ownerAPI = {
   },
   uploadContent: async (formData: FormData, onProgress?: (p: number) => void) => {
     const response = await api.post('/content/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 300000,
       onUploadProgress: (e) => {
         if (onProgress && e.total) {
           onProgress(Math.round((e.loaded / e.total) * 100));

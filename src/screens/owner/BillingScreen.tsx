@@ -26,7 +26,7 @@ export default function OwnerBillingScreen() {
         user?.shopId ? ownerAPI.getBilling(user.shopId) : Promise.resolve(null),
         ownerAPI.getCreditBalance(),
       ]);
-      if (creditData.status === 'fulfilled') setCreditBalance(creditData.value?.credit_balance || 0);
+      if (creditData.status === 'fulfilled') setCreditBalance(Number(creditData.value?.credit_balance || 0));
       if (billingData.status === 'fulfilled' && billingData.value) {
         setBilling(billingData.value?.bills || []);
       }
