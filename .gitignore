@@ -39,3 +39,20 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+.env
+.env.*
+*serviceAccount*.json
+google-services.json
+GoogleService-Info.plist
+*.keystore
+build/
+.dart_tool/
+__pycache__/
+venv/
+.venv/
+*.log
+.idea/
+.vs/
+bin/
+obj/
+.next/
